@@ -18,6 +18,10 @@ body {
     border: solid;
 }
 
+.hide {
+    display: none;
+}
+
 .modal {
     border: solid;
     width: 300px;
