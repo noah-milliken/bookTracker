@@ -1,66 +1,108 @@
-let myLibrary = [{
-    title: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    numberOfPages: 324,
-    haveRead: false
-},
-{
-    title: "1984",
-    author: "George Orwell",
-    numberOfPages: 328,
-    haveRead: false
-},];
-document.addEventListener('load', generateBookCards())
-
-const addbtn = document.querySelector('.add-book')
-const bookForm = document.querySelector('.book-form')
+const myLibrary = []
 
 
-addbtn.addEventListener('click', hideModal)
-bookForm.addEventListener('submit', addBookToLibrary)
+const addbtn = document.querySelector('.add-book');
+const bookForm = document.querySelector('.book-form');
 
+addbtn.addEventListener('click', hideModal);
+bookForm.addEventListener('submit', addBookToLibrary);
 
-function Book(title, author, numberOfPages, haveRead = false) {
-    this.title = title,
-        this.author = author,
-        this.numberOfPages = numberOfPages,
-        this.haveRead = haveRead
-
+function Book(title, author, pages, hasRead) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.hasRead = hasRead;
 }
 
 function addBookToLibrary(e) {
-    e.preventDefault()
-    let title = document.getElementById('book-title').value
-    let author = document.getElementById('author-name').value
-    let numberOfPages = parseInt(document.getElementById('number-pages').value)
-    let haveRead = document.getElementById('have-read').checked
+    e.preventDefault();
 
+    createBook();
 
-    const newBook = new Book(title, author, numberOfPages, haveRead)
-    myLibrary.push(newBook)
-    bookForm.reset()
-    generateBookCards()
-    hideModal()
+    bookForm.reset();
+
+    hideModal();
+    render();
 }
-function generateBookCards() {
-    const cardContainer = document.querySelector('.card-container')
-    let cardHtml = ''
-    myLibrary.forEach(book => {
-        let bookHtml = `
-        <div class="book-card">
-            <h2>${book.title}</h2>
-            <h3>${book.author}</h3>
-            <p>${book.numberOfPages}</p>
-            </div>
-        `
-        cardHtml += bookHtml
+
+function createBook() {
+    const title = bookForm.title.value;
+    const author = bookForm.author.value;
+    const pages = bookForm.pages.value;
+    const read = bookForm.read.checked
+
+    let newBook = new Book(title, author, pages, read);
+    myLibrary.push(newBook);
+}
+
+function render() {
+    const cardContainer = document.querySelector('.card-container');
+    const books = document.querySelectorAll('.book');
+    books.forEach(book => cardContainer.removeChild(book));
+
+    for (let i = 0; i < myLibrary.length; i++) {
+        createBookElement(myLibrary[i], i);
+    }
+}
+
+function createBookElement(book, index) {
+    console.log(book);
+
+    const cardContainer = document.querySelector('.card-container');
+    const cardDiv = document.createElement('div');
+    const titleDiv = document.createElement('div');
+    const authorDiv = document.createElement('div');
+    const pagesDiv = document.createElement('div');
+    const isRead = document.createElement('button')
+    const deleteBtn = document.createElement('button')
+
+    cardDiv.classList.add('book');
+    cardDiv.setAttribute('id', index);
+    cardContainer.appendChild(cardDiv);
+
+    titleDiv.textContent = book.title;
+    cardDiv.appendChild(titleDiv);
+
+    authorDiv.innerText = book.author;
+    cardDiv.appendChild(authorDiv);
+
+    pagesDiv.innerText = `${book.pages} pages`;
+    cardDiv.appendChild(pagesDiv);
+
+    deleteBtn.textContent = 'Delete Book'
+    deleteBtn.setAttribute('id', 'removeBtn')
+    cardDiv.appendChild(deleteBtn)
+
+    isRead.setAttribute('id', 'isRead')
+    cardDiv.appendChild(isRead)
+    if (book.hasRead) {
+        console.log(book.hasRead)
+        isRead.innerText = "read";
+        isRead.style.backgroundColor = "green"
+    } else {
+        isRead.innerText = "unread";
+        isRead.style.backgroundColor = "red"
+    }
+
+    deleteBtn.addEventListener('click', () => {
+
+        myLibrary.splice(myLibrary.indexOf(book), 1)
+        render()
     })
-    cardContainer.innerHTML = cardHtml
+
+    isRead.addEventListener('click', toggleRead)
+
+    function toggleRead() {
+        book.hasRead = !book.hasRead
+        console.log(myLibrary)
+        render()
+
+    }
 }
+
 function hideModal() {
-    let modal = document.getElementById('modal')
-    modal.classList.toggle('hide')
+    let modal = document.getElementById('modal');
+    modal.classList.toggle('hide');
 }
 
-console.log(myLibrary)
-
+render();
