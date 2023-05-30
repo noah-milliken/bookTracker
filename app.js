@@ -1,4 +1,67 @@
-const myLibrary = []
+const myLibrary = [
+    {
+        title: "To Kill a Mockingbird",
+        author: "Harper Lee",
+        pages: 336,
+        hasRead: true
+    },
+    {
+        title: "1984",
+        author: "George Orwell",
+        pages: 328,
+        hasRead: false
+    },
+    {
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        pages: 432,
+        hasRead: true
+    },
+    {
+        title: "The Great Gatsby",
+        author: "F. Scott Fitzgerald",
+        pages: 180,
+        hasRead: true
+    },
+    {
+        title: "The Catcher in the Rye",
+        author: "J.D. Salinger",
+        pages: 224,
+        hasRead: false
+    },
+    {
+        title: "To the Lighthouse",
+        author: "Virginia Woolf",
+        pages: 209,
+        hasRead: true
+    },
+    {
+        title: "Brave New World",
+        author: "Aldous Huxley",
+        pages: 288,
+        hasRead: false
+    },
+    {
+        title: "The Hobbit",
+        author: "J.R.R. Tolkien",
+        pages: 304,
+        hasRead: true
+    },
+    {
+        title: "Moby-Dick",
+        author: "Herman Melville",
+        pages: 585,
+        hasRead: true
+    },
+    {
+        title: "Frankenstein",
+        author: "Mary Shelley",
+        pages: 280,
+        hasRead: false
+    }
+];
+
+
 
 
 const addbtn = document.querySelector('.add-book');
@@ -53,6 +116,7 @@ function createBookElement(book, index) {
     const titleDiv = document.createElement('div');
     const authorDiv = document.createElement('div');
     const pagesDiv = document.createElement('div');
+    const buttonDiv = document.createElement('div')
     const isRead = document.createElement('button')
     const deleteBtn = document.createElement('button')
 
@@ -69,12 +133,14 @@ function createBookElement(book, index) {
     pagesDiv.innerText = `${book.pages} pages`;
     cardDiv.appendChild(pagesDiv);
 
+    cardDiv.appendChild(buttonDiv)
+
     deleteBtn.textContent = 'Delete Book'
     deleteBtn.setAttribute('id', 'removeBtn')
-    cardDiv.appendChild(deleteBtn)
+    buttonDiv.appendChild(deleteBtn)
 
     isRead.setAttribute('id', 'isRead')
-    cardDiv.appendChild(isRead)
+    buttonDiv.appendChild(isRead)
     if (book.hasRead) {
         console.log(book.hasRead)
         isRead.innerText = "read";
